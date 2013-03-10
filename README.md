@@ -27,9 +27,23 @@ distro (either Ubuntu 12.04 or RHEL6 derived system).
 The choices made here is to use Ubuntu 12.04 and Folsom which is the latest
 stable release.
 
+There are three networks in the VM environment with vagrant and virtual box
+
+* 10.0.2.0/255.255.255.0 - vagrant management network
+* 192.168.206.0/255.255.255.0 - ??? network - range taken from github.com/lorin/openstack-ansible
+* 192.168.100.0/255.255.255.0 - ??? network - range taken from github.com/lorin/openstack-ansible
+
 ### Node types needed
 
+Gotten from the interwebs - notes and other documentation
+
 * Controller Node
+    - Keystone
+    - Nova
+    - Glance
+    - Quantum
+    - Cinder
+    - Horizon
 * Compute Node
 * Network Node
 
@@ -52,7 +66,8 @@ The repo has a small _hosts_ file and ansible.cfg, so if you run ansible from
 the current top level directory of this repo, the 'correct' thing should
 happen (I hope). There is also a small _runner.sh_ script which wraps
 up running a playbook with the vagrant private key. Some this could go
-into the ansible.cfg file. It is yet to be decided.
+into the ansible.cfg file, it's there the runner script isn't needed
+but may be useful.
 
 ## Resources and references
 

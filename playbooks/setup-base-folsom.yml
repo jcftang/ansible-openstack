@@ -1,5 +1,5 @@
 ---
-- hosts: controller;compute
+- hosts: controller;network;compute
   user: vagrant
   sudo: True
 
@@ -20,5 +20,12 @@
       apt_repository: repo=ppa:openstack-ubuntu-testing/folsom-stable-testing
 
     # setup controller node
+    - name: Install Mysql and RabbitMQ
+      apt: name=$item state=present
+      with_items:
+        - mysql-server
+        - python-mysqldb
+        - rabbitmq-server
+
     # setup network node
     # setup compute node
