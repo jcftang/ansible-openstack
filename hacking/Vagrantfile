@@ -17,14 +17,14 @@ Vagrant::Config.run do |global_config|
     config.vm.network :hostonly, "192.168.100.110"
     config.vm.host_name = "controller.localhost"
 
-    config.vm.provision :ansible do |ansible|
-      # point Vagrant at the location of your playbook you want to run
-      ansible.playbook =  [ "playbooks/setup.yml" ]
-
-      # the Vagrant VM will be put in this host group change this should
-      # match the host group in your playbook you want to test
-      ansible.hosts = [ "controller" ]
-    end
+#    config.vm.provision :ansible do |ansible|
+#      # point Vagrant at the location of your playbook you want to run
+#      ansible.playbook =  [ "playbooks/setup.yml" ]
+#
+#      # the Vagrant VM will be put in this host group change this should
+#      # match the host group in your playbook you want to test
+#      ansible.hosts = [ "controller" ]
+#    end
 
     config.vm.customize [
       "modifyvm", :id,
@@ -41,14 +41,14 @@ Vagrant::Config.run do |global_config|
     config.vm.network :hostonly, "192.168.100.120"
     config.vm.host_name = "network.localhost"
 
-    config.vm.provision :ansible do |ansible|
-      # point Vagrant at the location of your playbook you want to run
-      ansible.playbook =  [ "playbooks/setup.yml" ]
-
-      # the Vagrant VM will be put in this host group change this should
-      # match the host group in your playbook you want to test
-      ansible.hosts = [ "network" ]
-    end
+#    config.vm.provision :ansible do |ansible|
+#      # point Vagrant at the location of your playbook you want to run
+#      ansible.playbook =  [ "playbooks/setup.yml" ]
+#
+#      # the Vagrant VM will be put in this host group change this should
+#      # match the host group in your playbook you want to test
+#      ansible.hosts = [ "network" ]
+#    end
 
     config.vm.customize [
       "modifyvm", :id,
@@ -73,14 +73,14 @@ Vagrant::Config.run do |global_config|
       compute.vm.network :hostonly, opts[:network1]
       compute.vm.host_name = opts[:host_name]
 
-      compute.vm.provision :ansible do |ansible|
-        # point Vagrant at the location of your playbook you want to run
-        ansible.playbook =  [ "playbooks/setup.yml" ]
-
-        # the Vagrant VM will be put in this host group change this should
-        # match the host group in your playbook you want to test
-        ansible.hosts = [ "compute" ]
-    end
+#      compute.vm.provision :ansible do |ansible|
+#        # point Vagrant at the location of your playbook you want to run
+#        ansible.playbook =  [ "playbooks/setup.yml" ]
+#
+#        # the Vagrant VM will be put in this host group change this should
+#        # match the host group in your playbook you want to test
+#        ansible.hosts = [ "compute" ]
+#    end
 
     compute.vm.customize [
       "modifyvm", :id,
