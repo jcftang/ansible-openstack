@@ -7,3 +7,5 @@
     - python-setuptools
     - python-mysqldb
     - python-psycopg2
+    - etckeeper
+    - git
