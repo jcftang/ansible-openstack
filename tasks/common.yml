@@ -9,3 +9,7 @@
     - python-psycopg2
     - etckeeper
     - git
+
+- name: Install ${openstack_release} repo
+  apt_repository: repo=ppa:openstack-ubuntu-testing/${openstack_release}-testing
+  only_if: is_set('$openstack_release')

@@ -8,6 +8,8 @@
     - ../vars/${ansible_distribution}.yml
 
   vars:
+    # Options: folsom-stable, essex-stable, grizzly-trunk
+    openstack_release: folsom-stable
 
   tasks:
     - name: Fail if distro not Ubuntu 12.04 | constrain testing and development
@@ -15,9 +17,6 @@
       only_if: "'$dist_tag' != 'ubuntu12.04'"
 
     - include: ../tasks/common.yml
-
-    - name: Install Folsom repo
-      apt_repository: repo=ppa:openstack-ubuntu-testing/folsom-stable-testing
 
     # setup controller node
     - name: Install Mysql and RabbitMQ

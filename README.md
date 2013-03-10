@@ -75,3 +75,4 @@ but may be useful.
 * <https://github.com/lorin/openstack-ansible/blob/master/vms/Vagrantfile>
 * <https://github.com/curtisgithub/ansible_playbooks/tree/master/openstack_essex>
 * <https://github.com/mseknibilel/OpenStack-Folsom-Install-guide/blob/master/OpenStack_Folsom_Install_Guide_WebVersion.rst>
+* <https://wiki.ubuntu.com/ServerTeam/OpenStack>

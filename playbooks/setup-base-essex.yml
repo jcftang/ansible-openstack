@@ -1,5 +1,5 @@
 ---
-- hosts: controller;compute
+- hosts: controller;network;compute
   user: vagrant
   sudo: True
 
@@ -8,6 +8,8 @@
     - ../vars/${ansible_distribution}.yml
 
   vars:
+    # Options: folsom-stable, essex-stable, grizzly-trunk
+    openstack_release: essex-stable
 
   tasks:
     - name: Fail if distro not Ubuntu 12.04 | constrain testing and development
@@ -16,5 +18,13 @@
 
     - include: ../tasks/common.yml
 
-    - name: Install Essex repo
-      apt_repository: repo=ppa:openstack-ubuntu-testing/essex-stable-testing
+    # setup controller node
+    - name: Install Mysql and RabbitMQ
+      apt: name=$item state=present
+      with_items:
+        - mysql-server
+        - python-mysqldb
+        - rabbitmq-server
+
+    # setup network node
+    # setup compute node
