@@ -10,6 +10,10 @@
   vars:
     # Options: folsom-stable, essex-stable, grizzly-trunk
     openstack_release: folsom-stable
+    keystone_server: 192.168.206.110
+    keystone_user: keystone
+    keystone_db_password: keysarelocked
+    admin_token: 012345SECRET99TOKEN012345
 
   tasks:
     - name: Fail if distro not Ubuntu 12.04 | constrain testing and development
@@ -19,6 +23,7 @@
     - include: ../tasks/common.yml
 
     # setup controller node
+    # keystone, glance, horizon, quantum
     - name: Install Mysql and RabbitMQ
       apt: name=$item state=present
       with_items:
@@ -26,5 +31,60 @@
         - python-mysqldb
         - rabbitmq-server
 
-    # setup network node
-    # setup compute node
+    - name: Install Addtional Services
+      apt: name=$item state=present
+      with_items:
+        - ntp
+        - vlan
+        - bridge-utils
+
+    - name: Enable IP forwarding
+      template: src=../files/${dist_tag}/sysctl.conf dest=/etc/sysctl.conf owner=root group=root
+
+    - name: Load changes from sysctl.conf
+      command: sysctl -p
+
+    # setup mysql for keystone
+    - name: Mysql | Listen on public interface 
+      template: src=../files/${dist_tag}/my.cnf dest=/etc/mysql/my.cnf owner=root group=root
+
+    - name: Ensure DB for keystone exists
+      mysql_db: name=keystone state=present
+
+    - name: Ensure keystone database user is present
+      mysql_user: name=${keystone_user} host=% password=${keystone_db_password} priv=${keystone_user}.*:ALL
+
+    # See the following links for why anonymous mysql users cause problems:
+    # http://www.tikalk.com/alm/blog/solution-mysql-error-1045-access-denied-userlocalhost-breaks-openstack
+    # http://lists.mysql.com/mysql/128381
+    - name: Ensure anonymous users removed from mysql
+      action: mysql_user name='' host=$item state=absent
+      with_items:
+        - localhost
+        - ${ansible_hostname}
+
+    - name: Restart Mysql
+      service: name=mysql state=restarted
+
+    # setup keystone 
+    - name: Install Keystone
+      apt: name=$item state=present
+      with_items:
+        - keystone
+
+    - name: Ensure sqlite keystone database is deleted
+      file: dest=/var/lib/keystone/keystone.db state=absent
+
+    - name: Configure Keystone
+      template: src=../templates/${dist_tag}/${openstack_release}/keystone.conf dest=/etc/keystone/keystone.conf owner=root group=root
+
+    - name: Restart Keystone
+      service: name=keystone state=restarted
+
+    - name: Sync Keystone database
+      command: keystone-manage db_sync
+
+    # create keystone users and endpoints
+
+    ### setup network node
+    ### setup compute node
