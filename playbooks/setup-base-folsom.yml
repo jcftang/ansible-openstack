@@ -18,3 +18,7 @@
 
     - name: Install Folsom repo
       apt_repository: repo=ppa:openstack-ubuntu-testing/folsom-stable-testing
+
+    # setup controller node
+    # setup network node
+    # setup compute node
