@@ -71,6 +71,8 @@ but may be useful.
 
 ## Resources and references
 
+* <https://github.com/ansible/ansible>
+* <https://github.com/ansible-provisioning/ansible-provisioning>
 * <https://groups.google.com/forum/?fromgroups=#!topic/ansible-project/eNlPwjIHGGs> - The thread that started this.
 * <https://github.com/lorin/openstack-ansible/blob/master/vms/Vagrantfile>
 * <https://github.com/curtisgithub/ansible_playbooks/tree/master/openstack_essex>
