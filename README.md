@@ -24,8 +24,27 @@ vms with the ansible plugin.
 Should target folsom or newer releases in a long term supported linux
 distro (either Ubuntu 12.04 or RHEL6 derived system).
 
+The choices made here is to use Ubuntu 12.04 and Folsom which is the latest
+stable release.
+
+### Node types needed
+
+* Controller Node
+* Compute Node
+* Network Node
+
+### Possible classes/roles needed
+
+* Keystone
+* Nova
+* Cinder
+* Glance
+* Horizon
+* Quantum
+
 ## Resources and references
 
-* <https://groups.google.com/forum/?fromgroups=#!topic/ansible-project/eNlPwjIHGGs>
+* <https://groups.google.com/forum/?fromgroups=#!topic/ansible-project/eNlPwjIHGGs> - The thread that started this.
 * <https://github.com/lorin/openstack-ansible/blob/master/vms/Vagrantfile>
 * <https://github.com/curtisgithub/ansible_playbooks/tree/master/openstack_essex>
+* <https://github.com/mseknibilel/OpenStack-Folsom-Install-guide/blob/master/OpenStack_Folsom_Install_Guide_WebVersion.rst>

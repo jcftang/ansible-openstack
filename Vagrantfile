@@ -13,8 +13,8 @@ Vagrant::Config.run do |global_config|
 
   ## start of controller vm
   global_config.vm.define(:controller) do |config|
-    config.vm.network :hostonly, "192.168.206.130"
-    config.vm.network :hostonly, "192.168.100.130"
+    config.vm.network :hostonly, "192.168.206.110"
+    config.vm.network :hostonly, "192.168.100.110"
     config.vm.host_name = "controller.localhost"
 
     config.vm.provision :ansible do |ansible|
@@ -35,10 +35,34 @@ Vagrant::Config.run do |global_config|
   ## end of controller vm
 
 
+  ## start of network vm
+  global_config.vm.define(:network) do |config|
+    config.vm.network :hostonly, "192.168.206.120"
+    config.vm.network :hostonly, "192.168.100.120"
+    config.vm.host_name = "network.localhost"
+
+    config.vm.provision :ansible do |ansible|
+      # point Vagrant at the location of your playbook you want to run
+      ansible.playbook =  [ "playbooks/setup.yml" ]
+
+      # the Vagrant VM will be put in this host group change this should
+      # match the host group in your playbook you want to test
+      ansible.hosts = [ "network" ]
+    end
+
+    config.vm.customize [
+      "modifyvm", :id,
+      "--name", "Network VM",
+      "--memory", "1024"
+    ]
+  end
+  ## end of network vm
+
+
   ## start of compute vms
   computeNodes = {
-    :compute00 => {:network0 => "192.168.206.131", :network1 => "192.168.100.131", :nodename => "compute00@192.168.206.131", :host_name => "compute00.localhost"},
-#    :compute01 => {:network0 => "192.168.206.132", :network1 => "192.168.100.132", :nodename => "compute01@192.168.206.132", :host_name => "compute01.localhost"},
+    :compute00 => {:network0 => "192.168.206.130", :network1 => "192.168.100.130", :nodename => "compute00@192.168.206.130", :host_name => "compute00.localhost"},
+    #:compute01 => {:network0 => "192.168.206.131", :network1 => "192.168.100.131", :nodename => "compute00@192.168.206.131", :host_name => "compute01.localhost"},
   }
 
   computeNodes.each do |name, opts|
@@ -55,7 +79,7 @@ Vagrant::Config.run do |global_config|
 
         # the Vagrant VM will be put in this host group change this should
         # match the host group in your playbook you want to test
-        ansible.hosts = [ "controller", "compute" ]
+        ansible.hosts = [ "compute" ]
     end
 
     compute.vm.customize [

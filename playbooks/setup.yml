@@ -1,2 +1,5 @@
+# this setup.yml file is called from the Vagrantfile, this just means there is
+# less fiddling with the Vagrantfile. There might a better way of doing things,
+# to be figured out!
 ---
-- include: setup-base-essex.yml
+- include: setup-base-folsom.yml
