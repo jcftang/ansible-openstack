@@ -10,8 +10,8 @@ Working installation of
 
 Upon first checkout
 
-  $ bundle
-  $ vagrant up
+    $ bundle
+    $ vagrant up
 
 The bundle command will install the needed components to run the vagrant
 vms with the ansible plugin.
