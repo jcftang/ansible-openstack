@@ -1,0 +1,9 @@
+---
+- name: Install common packages | makes for nicer admin/user experience later
+  apt: name=$item state=present update_cache=yes
+  with_items:
+    - python-software-properties
+    - python-pip
+    - python-setuptools
+    - python-mysqldb
+    - python-psycopg2

@@ -1,0 +1,3 @@
+---
+dist_tag: ubuntu${ansible_distribution_version}
+dist_release: ${ansible_distribution_release}

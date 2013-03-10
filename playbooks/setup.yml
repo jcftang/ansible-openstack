@@ -1,2 +1,2 @@
 ---
-- hosts: compute;controller
+- include: setup-base-essex.yml

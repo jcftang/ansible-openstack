@@ -1,0 +1,20 @@
+---
+- hosts: controller;compute
+  user: vagrant
+  sudo: True
+
+  vars_files:
+    - ../vars/global.yml
+    - ../vars/${ansible_distribution}.yml
+
+  vars:
+
+  tasks:
+    - name: Fail if distro not Ubuntu 12.04 | constrain testing and development
+      fail: msg="Must be running Ubuntu 12.04"
+      only_if: "'$dist_tag' != 'ubuntu12.04'"
+
+    - include: ../tasks/common.yml
+
+    - name: Install Folsom repo
+      apt_repository: repo=ppa:openstack-ubuntu-testing/folsom-stable-testing
