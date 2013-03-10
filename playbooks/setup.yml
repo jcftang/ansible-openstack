@@ -2,4 +2,4 @@
 # less fiddling with the Vagrantfile. There might a better way of doing things,
 # to be figured out!
 ---
-- include: setup-base-folsom.yml
+- include: folsom-stable-setup.yml

@@ -1,0 +1,30 @@
+---
+- hosts: controller;network;compute
+  user: vagrant
+  sudo: True
+
+  vars_files:
+    - ../vars/global.yml
+    - ../vars/${ansible_distribution}.yml
+
+  vars:
+    # Options: folsom-stable, essex-stable, grizzly-trunk
+    openstack_release: essex-stable
+
+  tasks:
+    - name: Fail if distro not Ubuntu 12.04 | constrain testing and development
+      fail: msg="Must be running Ubuntu 12.04"
+      only_if: "'$dist_tag' != 'ubuntu12.04'"
+
+    - include: ../tasks/common.yml
+
+    # setup controller node
+    - name: Install Mysql and RabbitMQ
+      apt: name=$item state=present
+      with_items:
+        - mysql-server
+        - python-mysqldb
+        - rabbitmq-server
+
+    # setup network node
+    # setup compute node
