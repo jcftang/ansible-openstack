@@ -97,5 +97,8 @@
       command: /tmp/keystone-init.py /tmp/keystone-config.yaml
       ignore_errors: True
 
+    - name: Ensure credentials.sh exists for convenience
+      template: src=../templates/credentials.sh dest=/root/credentials.sh owner=root group=root mode=0600
+
     ### setup network node
     ### setup compute node
