@@ -19,6 +19,8 @@
     glance_db_password: keysarelocked
     quantum_user: quantum
     quantum_db_password: keysarelocked
+    nova_user: nova
+    nova_db_password: keysarelocked
 
     admin_token: 012345SECRET99TOKEN012345
 
@@ -167,6 +169,37 @@
       template: src=../templates/${dist_tag}/${openstack_release}/quantum/api-paste.ini dest=/etc/quantum/api-paste.ini mode=0600
       notify: Restart quantum services
 
+    #
+    # setup nova
+    #
+    - name: Install Nova
+      apt: name=$item state=present
+      with_items:
+        - nova-api
+        - nova-cert
+        - novnc
+        - nova-consoleauth
+        - nova-scheduler
+        - nova-novncproxy
+
+    - name: Create DB for nova
+      mysql_db: name=nova state=present
+
+    - name: Create nova db user and enable rights to nova db
+      mysql_user: name=${nova_user} host=% password=${nova_db_password} priv=${nova_user}.*:ALL
+
+    - name: Update apt-paste.ini
+      template: src=../templates/${dist_tag}/${openstack_release}/nova/api-paste.ini dest=/etc/nova/api-paste.ini mode=0600
+      notify: Restart nova services
+
+    - name: Update nova.conf
+      template: src=../templates/${dist_tag}/${openstack_release}/nova/nova.conf dest=/etc/nova/nova.conf mode=0600
+      notify: Restart nova services
+
+    - name: Sync Nova DB
+      command: nova-manage db sync
+      notify: Restart nova services
+
   handlers:
     - name: Restart glance services
       service: name=$item state=restarted
@@ -178,6 +211,16 @@
       service: name=$item state=restarted
       with_items:
         - quantum-server
+
+    - name: Restart nova services
+      service: name=$item state=restarted
+      with_items:
+        - nova-api
+        - nova-consoleauth
+        - nova-scheduler
+        - nova-cert
+        - nova-novncproxy
+        - novnc
 
     ### setup network node
     ### setup compute node
