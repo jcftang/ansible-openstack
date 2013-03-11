@@ -12,10 +12,14 @@
     openstack_release: folsom-stable
     keystone_server: 192.168.206.110
     keystone_server_internal_ip: 192.168.100.110
+
     keystone_user: keystone
     keystone_db_password: keysarelocked
     glance_user: glance
     glance_db_password: keysarelocked
+    quantum_user: quantum
+    quantum_db_password: keysarelocked
+
     admin_token: 012345SECRET99TOKEN012345
 
   tasks:
@@ -141,12 +145,39 @@
       ignore_errors: True
       notify: Restart glance services
 
+    #
+    # setup quantum
+    #
+    - name: Install Quantum
+      apt: name=$item state=present
+      with_items:
+        - quantum-server
+        - quantum-plugin-openvswitch
+
+    - name: Create DB for quantum
+      mysql_db: name=quantum state=present
+
+    - name: Create quantum db user and enable rights to quantum db
+      mysql_user: name=${quantum_user} host=% password=${quantum_db_password} priv=${quantum_user}.*:ALL
+    - name: Update ovs_quantum_plugin.ini
+      template: src=../templates/${dist_tag}/${openstack_release}/quantum/ovs_quantum_plugin.ini dest=/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini mode=0600
+      notify: Restart quantum services
+
+    - name: Update apt-paste.ini
+      template: src=../templates/${dist_tag}/${openstack_release}/quantum/api-paste.ini dest=/etc/quantum/api-paste.ini mode=0600
+      notify: Restart quantum services
+
   handlers:
     - name: Restart glance services
       service: name=$item state=restarted
       with_items:
         - glance-api
         - glance-registry
+
+    - name: Restart quantum services
+      service: name=$item state=restarted
+      with_items:
+        - quantum-server
 
     ### setup network node
     ### setup compute node
