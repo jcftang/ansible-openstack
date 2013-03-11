@@ -20,11 +20,11 @@ stable release.
 
 Gotten from the interwebs - notes and other documentation
 
-* Controller Node
-    - Keystone
-    - Nova
-    - Glance
-    - Quantum
+* Controller Node (no distinction of internal and public network)
+    - Keystone - done
+    - Nova - done
+    - Glance - done
+    - Quantum - done
     - Cinder
     - Horizon
 * Compute Node
