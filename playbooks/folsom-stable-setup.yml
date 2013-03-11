@@ -95,6 +95,7 @@
 
     - name: Populate keystone database
       command: /tmp/keystone-init.py /tmp/keystone-config.yaml
+      ignore_errors: True
 
     ### setup network node
     ### setup compute node
