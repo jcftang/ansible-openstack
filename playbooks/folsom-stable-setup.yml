@@ -30,6 +30,8 @@
         - mysql-server
         - python-mysqldb
         - rabbitmq-server
+        - python-yaml
+        - python-keystoneclient
 
     - name: Install Addtional Services
       apt: name=$item state=present
@@ -85,6 +87,14 @@
       command: keystone-manage db_sync
 
     # create keystone users and endpoints
+    - name: Ensure keystone-init.py is present
+      copy: src=../files/keystone-init.py dest=/tmp/keystone-init.py owner=root group=root mode=0755
+
+    - name: Ensure kestyone-config.yaml is present
+      template: src=../templates/${dist_tag}/${openstack_release}/keystone-config.yaml dest=/tmp/keystone-config.yaml owner=root group=root mode=0600
+
+    - name: Populate keystone database
+      command: /tmp/keystone-init.py /tmp/keystone-config.yaml
 
     ### setup network node
     ### setup compute node
