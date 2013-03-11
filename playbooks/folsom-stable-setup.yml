@@ -11,8 +11,11 @@
     # Options: folsom-stable, essex-stable, grizzly-trunk
     openstack_release: folsom-stable
     keystone_server: 192.168.206.110
+    keystone_server_internal_ip: 192.168.100.110
     keystone_user: keystone
     keystone_db_password: keysarelocked
+    glance_user: glance
+    glance_db_password: keysarelocked
     admin_token: 012345SECRET99TOKEN012345
 
   tasks:
@@ -68,7 +71,9 @@
     - name: Restart Mysql
       service: name=mysql state=restarted
 
-    # setup keystone 
+    #
+    # setup keystone
+    #
     - name: Install Keystone
       apt: name=$item state=present
       with_items:
@@ -99,6 +104,49 @@
 
     - name: Ensure credentials.sh exists for convenience
       template: src=../templates/credentials.sh dest=/root/credentials.sh owner=root group=root mode=0600
+
+
+    #
+    # setup glance
+    #
+    - name: Install Glance
+      apt: name=$item state=present
+      with_items:
+        - glance
+
+    - name: Create DB for Glance
+      mysql_db: name=glance state=present
+
+    - name: Create glance db user and enable rights to glance db
+      mysql_user: name=${glance_user} host=% password=${glance_db_password} priv=${glance_user}.*:ALL
+
+    - name: Update glance-api-paste.ini
+      template: src=../templates/${dist_tag}/${openstack_release}/glance-api-paste.ini dest=/etc/glance/glance-api-paste.ini
+      notify: Restart glance services
+
+    - name: Update glance-registry-paste.ini
+      template: src=../templates/${dist_tag}/${openstack_release}/glance-registry-paste.ini dest=/etc/glance/glance-registry-paste.ini
+      notify: Restart glance services
+
+    - name: Update glance-api.conf
+      template: src=../templates/${dist_tag}/${openstack_release}/glance-api.conf dest=/etc/glance/glance-api.conf mode=0600
+      notify: Restart glance services
+
+    - name: Update glance-registry.conf
+      template: src=../templates/${dist_tag}/${openstack_release}/glance-registry.conf dest=/etc/glance/glance-registry.conf mode=0600
+      notify: Restart glance services
+
+    - name: Sync Glance DB
+      command: glance-manage db_sync
+      ignore_errors: True
+      notify: Restart glance services
+
+  handlers:
+    - name: Restart glance services
+      service: name=$item state=restarted
+      with_items:
+        - glance-api
+        - glance-registry
 
     ### setup network node
     ### setup compute node
