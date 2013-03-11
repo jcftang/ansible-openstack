@@ -3,28 +3,14 @@
   user: vagrant
   sudo: True
 
-  vars_files:
-    - ../vars/global.yml
-    - ../vars/${ansible_distribution}.yml
-
   vars:
     # Options: folsom-stable, essex-stable, grizzly-trunk
     openstack_release: folsom-stable
-    keystone_server: 192.168.206.110
-    keystone_server_internal_ip: 192.168.100.110
 
-    keystone_user: keystone
-    keystone_db_password: keysarelocked
-    glance_user: glance
-    glance_db_password: keysarelocked
-    quantum_user: quantum
-    quantum_db_password: keysarelocked
-    nova_user: nova
-    nova_db_password: keysarelocked
-    cinder_user: cinder
-    cinder_db_password: keysarelocked
-
-    admin_token: 012345SECRET99TOKEN012345
+  vars_files:
+    - ../vars/global.yml
+    - ../vars/${ansible_distribution}.yml
+    - ../${openstack_release}-config.yml
 
   tasks:
     - name: Fail if distro not Ubuntu 12.04 | constrain testing and development
