@@ -21,12 +21,12 @@ stable release.
 Gotten from the interwebs - notes and other documentation
 
 * Controller Node (no distinction of internal and public network)
-    - Keystone - done
-    - Nova - done
-    - Glance - done
-    - Quantum - done
-    - Cinder
-    - Horizon
+    - Keystone - basic setup done
+    - Nova - basic setup done
+    - Glance - basic setup done
+    - Quantum - basic setup done
+    - Cinder - basic setup done, cinder-volumes are yet to be done
+    - Horizon - basic setup done, inteface comes up, can login via username: adminUser password: secretword
 * Compute Node
 * Network Node
 
